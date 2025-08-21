@@ -61,6 +61,10 @@ class DeepSeekV31Detector(BaseFormatDetector):
             logger.error(f"Error in detect_and_parse: {e}")
             return StreamingParseResult(normal_text=text)
 
+    def has_tool_call(self, text: str) -> bool:
+        """Check if the text contains a deepseek v3.1 format tool call."""
+        return self.bot_token in text or "<｜tool▁call▁begin｜>" in text
+
     def parse_streaming_increment(self, new_text: str, tools: List[Tool]) -> StreamingParseResult:
         """
         Streaming incremental parsing tool calls for DeepSeekV3 format.
