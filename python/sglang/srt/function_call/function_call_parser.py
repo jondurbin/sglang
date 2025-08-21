@@ -38,7 +38,7 @@ class FunctionCallParser:
         "qwen25": Qwen25Detector,
         "mistral": MistralDetector,
         "deepseekv3": DeepSeekV3Detector,
-        "deepseekv31", DeepSeekV31Detector,
+        "deepseekv31": DeepSeekV31Detector,
         "pythonic": PythonicDetector,
         "kimi_k2": KimiK2Detector,
         "qwen3_coder": Qwen3CoderDetector,
