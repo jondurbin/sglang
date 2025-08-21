@@ -295,7 +295,7 @@ class OpenAIServingChat(OpenAIServingBase):
                 prompt = prompt[: -len(conv.sep2)]
         else:
             prompt = conv.get_prompt()
-            if self._get_enable_thinking_from_request(request):
+            if self._get_enable_thinking_from_request(request) and not prompt.strip().endswith("<think>"):
                 prompt += "<think>"  # Note(Xinyuan): hard code thinking token
 
         image_data = conv.image_data if conv.image_data else None
@@ -862,9 +862,9 @@ class OpenAIServingChat(OpenAIServingBase):
         if (
             hasattr(request, "chat_template_kwargs")
             and request.chat_template_kwargs
-            and request.chat_template_kwargs.get("enable_thinking") is not None
+            and ("enable_thinking" in request.chat_template_kwargs or "thinking" in request.chat_template_kwargs)
         ):
-            return request.chat_template_kwargs.get("enable_thinking")
+            return request.chat_template_kwargs.get("enable_thinking") or request.chat_template_kwargs.get("thinking")
         return False
 
     async def _process_tool_call_stream(
