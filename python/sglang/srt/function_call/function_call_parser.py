@@ -59,6 +59,7 @@ class FunctionCallParser:
 
         self.detector = detector
         self.tools = tools
+        self.tool_call_parser = tool_call_parser
 
     def has_tool_call(self, text: str) -> bool:
         """
@@ -179,12 +180,14 @@ class FunctionCallParser:
         ):
             strict_tag = self.get_structure_tag()
             return ("structural_tag", strict_tag)
-        elif tool_choice == "required" or isinstance(tool_choice, ToolChoice):
+        elif (tool_choice == "required"
+              or isinstance(tool_choice, ToolChoice)
+              or (tool_choice == "auto" and self.tool_call_parser == "longcat")):
             ebnf = self.get_ebnf(tool_choice)
             return ("ebnf", ebnf) if ebnf is not None else None
 
     def get_ebnf(
-        self, tool_choice: Union[ToolChoice, Literal["required"]]
+        self, tool_choice: Union[ToolChoice, Literal["required", "auto"]]
     ) -> Optional[str]:
         """
         Get the EBNF grammar for the specified tool choice.
